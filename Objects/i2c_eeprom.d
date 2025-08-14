@@ -1,0 +1,16 @@
+.\objects\i2c_eeprom.o: Libraries\src\i2c_eeprom.c
+.\objects\i2c_eeprom.o: .\Libraries\inc\i2c_eeprom.h
+.\objects\i2c_eeprom.o: .\Libraries\inc\cw32l011_i2c.h
+.\objects\i2c_eeprom.o: .\Startup\system_cw32l011.h
+.\objects\i2c_eeprom.o: .\Libraries\inc\cw32l011.h
+.\objects\i2c_eeprom.o: D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h
+.\objects\i2c_eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\i2c_eeprom.o: D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h
+.\objects\i2c_eeprom.o: D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h
+.\objects\i2c_eeprom.o: D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h
+.\objects\i2c_eeprom.o: .\Startup\system_cw32l011.h
+.\objects\i2c_eeprom.o: .\Libraries\inc\base_types.h
+.\objects\i2c_eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\i2c_eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\i2c_eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\i2c_eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\assert.h

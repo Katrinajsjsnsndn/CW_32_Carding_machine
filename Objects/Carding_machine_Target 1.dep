@@ -1,0 +1,389 @@
+Dependencies for Project 'Carding_machine', Target 'Target 1': (DO NOT MODIFY !)
+CompilerVersion: 5060528::V5.06 update 5 (build 528)::ARMCC
+F (.\Startup\startup_cw32l011.s)(0x685A510C)(--cpu Cortex-M0+ -g --apcs=interwork -I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include--pd "__UVISION_VERSION SETA 539" --pd "_RTE_ SETA 1" --pd "_RTE_ SETA 1"--list .\listings\startup_cw32l011.lst --xref -o .\objects\startup_cw32l011.o --depend .\objects\startup_cw32l011.d)
+F (.\Startup\system_cw32l011.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\system_cw32l011.o --omf_browse .\objects\system_cw32l011.crf --depend .\objects\system_cw32l011.d)
+I (Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+F (.\USER\src\interrupts_cw32l011.c)(0x689D84A3)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\interrupts_cw32l011.o --omf_browse .\objects\interrupts_cw32l011.crf --depend .\objects\interrupts_cw32l011.d)
+I (.\USER\inc\main.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011_gpio.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011_systick.h)(0x685A510C)
+I (.\USER\inc\interrupts_cw32l011.h)(0x685A510C)
+F (.\USER\src\main.c)(0x689DB0C3)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+I (USER\src\../inc/main.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011_gpio.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011_systick.h)(0x685A510C)
+I (USER\src\../inc/interrupts_cw32l011.h)(0x685A510C)
+F (.\Libraries\src\cw32l011_flash.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_flash.o --omf_browse .\objects\cw32l011_flash.crf --depend .\objects\cw32l011_flash.d)
+I (.\Libraries\inc\cw32l011_flash.h)(0x685A510C)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+F (.\Libraries\src\cw32l011_gpio.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_gpio.o --omf_browse .\objects\cw32l011_gpio.crf --depend .\objects\cw32l011_gpio.d)
+I (.\Libraries\inc\cw32l011_gpio.h)(0x685A510C)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
+F (.\Libraries\src\cw32l011_sysctrl.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_sysctrl.o --omf_browse .\objects\cw32l011_sysctrl.crf --depend .\objects\cw32l011_sysctrl.d)
+I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+F (.\Libraries\src\cw32l011_adc.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_adc.o --omf_browse .\objects\cw32l011_adc.crf --depend .\objects\cw32l011_adc.d)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011_adc.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011_gpio.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
+F (.\Libraries\src\cw32l011_atim.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_atim.o --omf_browse .\objects\cw32l011_atim.crf --depend .\objects\cw32l011_atim.d)
+I (.\Libraries\inc\cw32l011_atim.h)(0x685A510C)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+F (.\Libraries\src\cw32l011_btim.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_btim.o --omf_browse .\objects\cw32l011_btim.crf --depend .\objects\cw32l011_btim.d)
+I (.\Libraries\inc\cw32l011_btim.h)(0x685A510C)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
+F (.\Libraries\src\cw32l011_crc.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_crc.o --omf_browse .\objects\cw32l011_crc.crf --depend .\objects\cw32l011_crc.d)
+I (.\Libraries\inc\cw32l011_crc.h)(0x685A510C)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+F (.\Libraries\src\cw32l011_debug.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_debug.o --omf_browse .\objects\cw32l011_debug.crf --depend .\objects\cw32l011_debug.d)
+I (.\Libraries\inc\cw32l011_debug.h)(0x685A510C)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+F (.\Libraries\src\cw32l011_digitalsign.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_digitalsign.o --omf_browse .\objects\cw32l011_digitalsign.crf --depend .\objects\cw32l011_digitalsign.d)
+I (.\Libraries\inc\cw32l011_digitalsign.h)(0x685A510C)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+F (.\Libraries\src\cw32l011_gtim.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_gtim.o --omf_browse .\objects\cw32l011_gtim.crf --depend .\objects\cw32l011_gtim.d)
+I (.\Libraries\inc\cw32l011_gtim.h)(0x685A510C)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
+F (.\Libraries\src\cw32l011_i2c.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_i2c.o --omf_browse .\objects\cw32l011_i2c.crf --depend .\objects\cw32l011_i2c.d)
+I (.\Libraries\inc\cw32l011_i2c.h)(0x685A510C)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+F (.\Libraries\src\cw32l011_iwdt.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_iwdt.o --omf_browse .\objects\cw32l011_iwdt.crf --depend .\objects\cw32l011_iwdt.d)
+I (.\Libraries\inc\cw32l011_iwdt.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
+F (.\Libraries\src\cw32l011_lptim.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_lptim.o --omf_browse .\objects\cw32l011_lptim.crf --depend .\objects\cw32l011_lptim.d)
+I (.\Libraries\inc\cw32l011_lptim.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
+F (.\Libraries\src\cw32l011_lvd.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_lvd.o --omf_browse .\objects\cw32l011_lvd.crf --depend .\objects\cw32l011_lvd.d)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011_lvd.h)(0x685A510C)
+F (.\Libraries\src\cw32l011_pwr.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_pwr.o --omf_browse .\objects\cw32l011_pwr.crf --depend .\objects\cw32l011_pwr.d)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011_pwr.h)(0x685A510C)
+F (.\Libraries\src\cw32l011_ram.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_ram.o --omf_browse .\objects\cw32l011_ram.crf --depend .\objects\cw32l011_ram.d)
+I (.\Libraries\inc\cw32l011_ram.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+F (.\Libraries\src\cw32l011_rtc.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_rtc.o --omf_browse .\objects\cw32l011_rtc.crf --depend .\objects\cw32l011_rtc.d)
+I (.\Libraries\inc\cw32l011_rtc.h)(0x685A510C)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
+F (.\Libraries\src\cw32l011_spi.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_spi.o --omf_browse .\objects\cw32l011_spi.crf --depend .\objects\cw32l011_spi.d)
+I (.\Libraries\inc\cw32l011_spi.h)(0x685A510C)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+F (.\Libraries\src\cw32l011_systick.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_systick.o --omf_browse .\objects\cw32l011_systick.crf --depend .\objects\cw32l011_systick.d)
+I (.\Libraries\inc\cw32l011_systick.h)(0x685A510C)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+F (.\Libraries\src\cw32l011_uart.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_uart.o --omf_browse .\objects\cw32l011_uart.crf --depend .\objects\cw32l011_uart.d)
+I (.\Libraries\inc\cw32l011_uart.h)(0x685A510C)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+F (.\Libraries\src\cw32l011_vc.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_vc.o --omf_browse .\objects\cw32l011_vc.crf --depend .\objects\cw32l011_vc.d)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011_vc.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011_adc.h)(0x685A510C)
+F (.\Libraries\src\i2c_eeprom.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\i2c_eeprom.o --omf_browse .\objects\i2c_eeprom.crf --depend .\objects\i2c_eeprom.d)
+I (.\Libraries\inc\i2c_eeprom.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011_i2c.h)(0x685A510C)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+F (.\StartKit_Board\cw32l011_startkit_board.c)(0x685A510C)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\cw32l011_startkit_board.o --omf_browse .\objects\cw32l011_startkit_board.crf --depend .\objects\cw32l011_startkit_board.d)
+I (StartKit_Board\cw32l011_startkit_board.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011.h)(0x685A510C)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
+I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
+I (.\Startup\system_cw32l011.h)(0x689D8977)
+I (.\Libraries\inc\base_types.h)(0x685A510C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
+I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
+I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011_systick.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011_gpio.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011_uart.h)(0x685A510C)
