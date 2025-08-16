@@ -17,3 +17,4 @@
 .\objects\interrupts_cw32l011.o: .\Libraries\inc\cw32l011_sysctrl.h
 .\objects\interrupts_cw32l011.o: .\Libraries\inc\cw32l011_systick.h
 .\objects\interrupts_cw32l011.o: .\USER\inc\interrupts_cw32l011.h
+.\objects\interrupts_cw32l011.o: .\Libraries\inc\cw32l011_uart.h

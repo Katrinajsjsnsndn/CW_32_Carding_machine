@@ -31,6 +31,7 @@ extern "C"
 #include "cw32l011_systick.h"
 #include "interrupts_cw32l011.h"
 #include "system_cw32l011.h"
+#include "cw32l011_uart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

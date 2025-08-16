@@ -45,7 +45,11 @@
  * Local function prototypes ('static')
  ******************************************************************************/
 void my_gpio_init(void);
-
+void RCC_Configuration(void);
+void GPIO_Configuration(void);
+void UART_Configuration(void);
+void NVIC_Configuration(void);
+void UART_SendString(UART_TypeDef *UARTx, char *String);
 
 /******************************************************************************
  * Local variable definitions ('static')                                      *
@@ -69,34 +73,25 @@ void my_gpio_init(void);
  ** This sample toggle GPIOA
  **
  ******************************************************************************/
+ uint8_t data=0x02;
 int32_t main(void)
 {
-   
+       //配置RCC
+    RCC_Configuration();
 		my_gpio_init();
+	UART_Configuration();
+	NVIC_Configuration();
+	   GPIO_WritePin( CW_GPIOB, GPIO_PIN_3|GPIO_PIN_4, GPIO_Pin_SET );
+    UART_ITConfig(CW_UART3, UART_IT_RC, ENABLE);
+		UART_ClearITPendingBit(CW_UART3, UART_IT_RC);
+
     while(1)
     {
-        //-----------------------------------------------------------------------
-        //以下调用函数法读写PIN
-        if( GPIO_ReadPin(CW_GPIOA, GPIO_PIN_15 ) )
-        {
-            GPIO_WritePin( CW_GPIOA, GPIO_PIN_0|GPIO_PIN_1, GPIO_Pin_SET );
-        }
-        else
-        {
-            GPIO_WritePin( CW_GPIOA, GPIO_PIN_0|GPIO_PIN_1, GPIO_Pin_RESET );
-        }
 
-        //-----------------------------------------------------------------------
-        //以下采用宏定义读写PIN
-        if( PA15_GETVALUE() )
-        {
-            PA02_SETHIGH();
-            PA03_TOG();
-        }
-        else
-        {
-            PA02_SETLOW();
-        }
+          UART_SendData_8bit(CW_UART3, data);
+        while (UART_GetFlagStatus(CW_UART3, UART_FLAG_TXE) == RESET);
+
+      
     }
 
 }
@@ -137,5 +132,62 @@ void my_gpio_init()
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT_PULLUP;
     GPIO_InitStruct.IT   = GPIO_IT_NONE;
     GPIO_Init( CW_GPIOA, &GPIO_InitStruct);
+	
+    GPIO_InitStruct.Pins = GPIO_PIN_1;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_Init(CW_GPIOA, &GPIO_InitStruct);
+	
+    GPIO_InitStruct.Pins = GPIO_PIN_0;
 
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT_PULLUP;
+    GPIO_Init(CW_GPIOA, &GPIO_InitStruct);
+
+    //UART TX RX 复用
+    PA00_AFx_UART3RXD();
+    PA01_AFx_UART3TXD();
+}
+
+/**
+ * @brief 配置RCC
+ *
+ */
+void RCC_Configuration(void)
+{
+    //SYSCLK = HSI = 8MHz = HCLK = PCLK
+    SYSCTRL_HSI_Enable(SYSCTRL_HSIOSC_DIV12);
+
+    //外设时钟使能
+    SYSCTRL_AHBPeriphClk_Enable(SYSCTRL_AHB_PERIPH_GPIOA, ENABLE);
+    SYSCTRL_APBPeriphClk_Enable1(SYSCTRL_APB1_PERIPH_UART1, ENABLE);
+}     
+
+/**
+ * @brief 配置UART
+ *
+ */
+void UART_Configuration(void)
+{
+    UART_InitTypeDef UART_InitStructure = {0};
+
+    UART_InitStructure.UART_BaudRate = 115200;
+    UART_InitStructure.UART_Over = UART_Over_16;
+    UART_InitStructure.UART_Source = UART_Source_PCLK;
+    UART_InitStructure.UART_UclkFreq = 8000000;
+    UART_InitStructure.UART_StartBit = UART_StartBit_FE;
+    UART_InitStructure.UART_StopBits = UART_StopBits_1;
+    UART_InitStructure.UART_Parity = UART_Parity_No ;
+    UART_InitStructure.UART_HardwareFlowControl = UART_HardwareFlowControl_None;
+    UART_InitStructure.UART_Mode = UART_Mode_Rx | UART_Mode_Tx;
+    UART_Init(CW_UART3, &UART_InitStructure);
+}
+/**
+ * @brief 配置NVIC
+ *
+ */
+void NVIC_Configuration(void)
+{
+    //优先级，无优先级分组
+    NVIC_SetPriority(UART3_IRQn, 0);
+    //UARTx中断使能
+    NVIC_EnableIRQ(UART3_IRQn);
 }
