@@ -3,6 +3,7 @@
 ".\objects\system_cw32l011.o"
 ".\objects\interrupts_cw32l011.o"
 ".\objects\main.o"
+".\objects\wifi_comm.o"
 ".\objects\cw32l011_flash.o"
 ".\objects\cw32l011_gpio.o"
 ".\objects\cw32l011_sysctrl.o"

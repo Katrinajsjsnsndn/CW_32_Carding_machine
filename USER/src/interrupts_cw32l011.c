@@ -335,15 +335,36 @@ void UART2_IRQHandler(void)
     /* USER CODE END */
 }
 
+
 /**
- * @brief This funcation handles UART3
+ * @brief UART3中断服务函数
  */
 void UART3_IRQHandler(void)
 {
-    /* USER CODE BEGIN */
-
-    /* USER CODE END */
+    if(UART_GetITStatus(CW_UART3, UART_IT_RC) != RESET)
+    {
+        // 清除接收中断标志
+        UART_ClearITPendingBit(CW_UART3, UART_IT_RC);
+        
+        // 读取接收到的数据
+        uint8_t received_data = UART_ReceiveData_8bit(CW_UART3);
+        
+        // 将数据存储到缓冲区
+        if(wifi_rx_index < WIFI_BUFFER_SIZE)
+        {
+            wifi_rx_buffer[wifi_rx_index++] = received_data;
+            wifi_rx_flag = 1; // 设置接收标志
+        }
+        else
+        {
+            // 缓冲区满，重置索引
+            wifi_rx_index = 0;
+            wifi_rx_buffer[wifi_rx_index++] = received_data;
+            wifi_rx_flag = 1;
+        }
+    }
 }
+
 
 /**
  * @brief This funcation handles FAULT

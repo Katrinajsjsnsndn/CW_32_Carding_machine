@@ -28,6 +28,9 @@
  * Include files
  ******************************************************************************/
 #include "../inc/main.h"
+#include "cw32l011_uart.h"
+#include "interrupts_cw32l011.h"
+#include "wifi_config.h"
 
 /******************************************************************************
  * Local pre-processor symbols/macros ('#define')
@@ -36,6 +39,10 @@
 /******************************************************************************
  * Global variable definitions (declared in header file with 'extern')
  ******************************************************************************/
+// 全局变量定义
+volatile uint8_t wifi_rx_buffer[WIFI_BUFFER_SIZE];  // 接收缓冲区
+volatile uint16_t wifi_rx_index = 0;               // 接收索引
+volatile uint8_t wifi_rx_flag = 0;                 // 接收标志
 
 /******************************************************************************
  * Local type definitions ('typedef')
@@ -50,6 +57,9 @@ void GPIO_Configuration(void);
 void UART_Configuration(void);
 void NVIC_Configuration(void);
 void UART_SendString(UART_TypeDef *UARTx, char *String);
+void wifi_send_at_command(const char* command);
+void wifi_test_communication(void);
+void delay_ms(uint32_t ms);
 
 /******************************************************************************
  * Local variable definitions ('static')                                      *
@@ -73,27 +83,52 @@ void UART_SendString(UART_TypeDef *UARTx, char *String);
  ** This sample toggle GPIOA
  **
  ******************************************************************************/
- uint8_t data=0x02;
 int32_t main(void)
 {
-       //配置RCC
+    //配置RCC
     RCC_Configuration();
-		my_gpio_init();
-	UART_Configuration();
-	NVIC_Configuration();
-	   GPIO_WritePin( CW_GPIOB, GPIO_PIN_3|GPIO_PIN_4, GPIO_Pin_SET );
-    UART_ITConfig(CW_UART3, UART_IT_RC, ENABLE);
-		UART_ClearITPendingBit(CW_UART3, UART_IT_RC);
+    my_gpio_init();
+    UART_Configuration();
+    NVIC_Configuration();
+    
+    // 初始化串口接收
+    uart_rx_init();
+    
+    GPIO_WritePin( CW_GPIOB, GPIO_PIN_3|GPIO_PIN_4, GPIO_Pin_SET );
+    UART_SendString(CW_UART3, "AT\r\n");
+
+    // 等待系统稳定
+    delay_ms(500);
+    
+    // 初始化WiFi模块
+    wifi_init();
+    
+    // 连接WiFi网络
+    if(wifi_connect_network(WIFI_SSID, WIFI_PASSWORD))
+    {
+        // 获取IP地址
+        wifi_get_ip_address();
+        
+        // 连接TCP服务器
+        if(wifi_tcp_connect(TCP_SERVER_IP, TCP_SERVER_PORT))
+        {
+            // TCP连接成功，可以发送数据
+            wifi_tcp_send_data("Hello from CW32L011!");
+        }
+    }
 
     while(1)
     {
-
-          UART_SendData_8bit(CW_UART3, data);
-        while (UART_GetFlagStatus(CW_UART3, UART_FLAG_TXE) == RESET);
-
-      
+//        // 处理接收到的数据
+//        wifi_process_received_data();
+//        
+//        // 每10秒发送一次心跳数据
+//        delay_ms(10000);
+//        if(wifi_is_tcp_connected())
+//        {
+//            wifi_tcp_send_data("Heartbeat from CW32L011");
+//        }
     }
-
 }
 
 
@@ -119,9 +154,9 @@ void assert_failed(uint8_t* file, uint32_t line)
 
 void my_gpio_init()
 {
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
+		GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-   __SYSCTRL_GPIOA_CLK_ENABLE();    //Open GPIOA Clk
+    __SYSCTRL_GPIOA_CLK_ENABLE();    //Open GPIOA Clk
 		__SYSCTRL_GPIOB_CLK_ENABLE();
     //set PA00 / PA01 / PA02 / PA03 as output
     GPIO_InitStruct.Pins = GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6;
@@ -158,7 +193,7 @@ void RCC_Configuration(void)
 
     //外设时钟使能
     SYSCTRL_AHBPeriphClk_Enable(SYSCTRL_AHB_PERIPH_GPIOA, ENABLE);
-    SYSCTRL_APBPeriphClk_Enable1(SYSCTRL_APB1_PERIPH_UART1, ENABLE);
+    SYSCTRL_APBPeriphClk_Enable1(SYSCTRL_APB1_PERIPH_UART3, ENABLE); // 修正为UART3
 }     
 
 /**
@@ -190,4 +225,126 @@ void NVIC_Configuration(void)
     NVIC_SetPriority(UART3_IRQn, 0);
     //UARTx中断使能
     NVIC_EnableIRQ(UART3_IRQn);
+}
+
+/**
+ * @brief 发送WiFi AT命令
+ * @param command: 要发送的AT命令
+ */
+void wifi_send_at_command(const char* command)
+{
+    UART_SendString(CW_UART3, command);
+    UART_SendString(CW_UART3, "\r\n");
+    delay_ms(1000); // 等待响应
+}
+
+/**
+ * @brief 毫秒延时函数
+ * @param ms: 延时时间(毫秒)
+ */
+void delay_ms(uint32_t ms)
+{
+    uint32_t i, j;
+    for(i = 0; i < ms; i++)
+    {
+        for(j = 0; j < 1000; j++)
+        {
+            __NOP();
+        }
+    }
+}
+
+/**
+ * @brief 初始化串口接收
+ */
+void uart_rx_init(void)
+{
+    // 清空接收缓冲区
+    uart_rx_clear_buffer();
+    
+    // 启用UART3接收中断
+    UART_ITConfig(CW_UART3, UART_IT_RC, ENABLE);  // 启用接收中断
+    
+    // 启用UART3中断
+    NVIC_EnableIRQ(UART3_IRQn);
+}
+
+/**
+ * @brief 获取接收到的数据
+ * @param buffer: 数据缓冲区
+ * @param max_len: 最大长度
+ * @return 实际接收到的数据长度
+ */
+uint16_t uart_rx_get_data(uint8_t *buffer, uint16_t max_len)
+{
+    uint16_t len = 0;
+
+    if(wifi_rx_flag && wifi_rx_index > 0)
+    {
+        // 计算实际长度
+        len = (wifi_rx_index < max_len) ? wifi_rx_index : max_len;
+
+        // 复制数据
+        for(uint16_t i = 0; i < len; i++)
+        {
+            buffer[i] = wifi_rx_buffer[i];
+        }
+
+        // 清空接收标志
+        wifi_rx_flag = 0;
+    }
+		//uart_rx_clear_buffer();
+    return len;
+}
+
+/**
+ * @brief 清空接收缓冲区
+ */
+void uart_rx_clear_buffer(void)
+{
+    wifi_rx_index = 0;
+    wifi_rx_flag = 0;
+    
+    // 清空缓冲区内容
+    for(uint16_t i = 0; i < WIFI_BUFFER_SIZE; i++)
+    {
+        wifi_rx_buffer[i] = 0;
+    }
+}
+
+/**
+ * @brief 检查是否有数据可读
+ * @return 1: 有数据, 0: 无数据
+ */
+uint8_t uart_rx_is_data_ready(void)
+{
+    return wifi_rx_flag;
+}
+
+/**
+ * @brief 获取接收到的数据长度
+ * @return 数据长度
+ */
+uint16_t uart_rx_get_data_length(void)
+{
+    return wifi_rx_index;
+}
+
+/**
+ * @brief 处理接收到的数据
+ */
+        uint8_t response_buffer[WIFI_BUFFER_SIZE];
+
+void wifi_process_received_data(void)
+{
+    if(uart_rx_is_data_ready())
+    {
+        uint16_t len = uart_rx_get_data(response_buffer, WIFI_BUFFER_SIZE);
+        
+        // 这里可以添加数据处理逻辑
+        // 例如：解析AT命令响应、处理MQTT消息等
+        
+        // 数据已处理，缓冲区已清空
+        // 可以根据需要添加具体的业务逻辑
+    }
 }

@@ -24,7 +24,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdint.h>
 /* USER CODE END Includes */
 
 
@@ -72,10 +72,14 @@ extern void I2C_IRQHandler(void);
 extern void SPI1_IRQHandler(void);
 extern void UART1_IRQHandler(void);
 extern void UART2_IRQHandler(void);
+extern void UART3_IRQHandler(void);
 extern void CLKFAULT_IRQHandler(void);
 
 /* USER CODE BEGIN EFP */
-
+// WiFi接收缓冲区外部变量声明
+extern volatile uint8_t wifi_rx_buffer[];
+extern volatile uint16_t wifi_rx_index;
+extern volatile uint8_t wifi_rx_flag;
 /* USER CODE END EFP */
 
 

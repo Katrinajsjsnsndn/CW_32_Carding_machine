@@ -24,6 +24,10 @@ extern "C"
 {
 #endif
 
+/* 串口接收缓冲区配置 */
+#define WIFI_BUFFER_SIZE 256
+#define UART_RX_TIMEOUT_MS 100  // 接收超时时间(ms)
+
 /* Includes ------------------------------------------------------------------*/
 #include "cw32l011.h"
 #include "cw32l011_gpio.h"
@@ -55,11 +59,30 @@ extern "C"
 
 /* Exported functions prototypes ---------------------------------------------*/
 /* USER CODE BEGIN EFP */
+// 串口接收相关函数
+void uart_rx_init(void);
+uint16_t uart_rx_get_data(uint8_t *buffer, uint16_t max_len);
+void uart_rx_clear_buffer(void);
+uint8_t uart_rx_is_data_ready(void);
+uint16_t uart_rx_get_data_length(void);
+
+// WiFi通信相关函数
+void wifi_send_at_command(const char *command);
+void wifi_process_received_data(void);
+
+// 延时函数
+void delay_ms(uint32_t ms);
 /* USER CODE END EFP */
 
 
 /* Private defines -----------------------------------------------------------*/
 /* USER CODE BEGIN Private defines */
+#define WIFI_BUFFER_SIZE 256
+
+// 全局变量声明
+extern volatile uint8_t wifi_rx_buffer[WIFI_BUFFER_SIZE];
+extern volatile uint16_t wifi_rx_index;
+extern volatile uint8_t wifi_rx_flag;
 /* USER CODE END Private defines */
 
 
