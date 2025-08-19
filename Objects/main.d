@@ -19,3 +19,5 @@
 .\objects\main.o: USER\src\../inc/interrupts_cw32l011.h
 .\objects\main.o: .\Libraries\inc\cw32l011_uart.h
 .\objects\main.o: .\USER\inc\wifi_config.h
+.\objects\main.o: .\Libraries\inc\cw32l011_adc.h
+.\objects\main.o: .\Libraries\inc\cw32l011_rtc.h

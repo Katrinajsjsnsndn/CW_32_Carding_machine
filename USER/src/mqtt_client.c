@@ -56,7 +56,7 @@ uint8_t mqtt_publish(const char* topic, const char* payload, uint8_t qos, uint8_
 {
 	char command[256];
 	// 大多数模组支持：AT+MQTTPUB="topic","payload",qos,retain
-	sprintf(command, "%s=\"%s\",\"%s\",%d,%d", AT_CMD_MQTT_PUBLISH, topic, payload, qos, retain);
+	sprintf(command, "%s=\"%s\",%d,%d,\"%s\"", AT_CMD_MQTT_PUBLISH, topic, qos, retain, payload);
 	return mqtt_send_and_wait_ok(command, 5000);
 }
 

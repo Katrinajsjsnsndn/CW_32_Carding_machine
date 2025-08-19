@@ -174,14 +174,16 @@ void GPIOA_IRQHandler(void)
 
     /* USER CODE END */
 }
-
+uint8_t Status_Flag;
 /**
  * @brief This funcation handles GPIOB
  */
 void GPIOB_IRQHandler(void)
 {
     /* USER CODE BEGIN */
-    
+	    GPIOB_INTFLAG_CLR(GPIO_PIN_7);
+
+    Status_Flag=1;
     /* USER CODE END */
 }
 

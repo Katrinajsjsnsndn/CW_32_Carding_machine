@@ -31,6 +31,9 @@
 #include "cw32l011_uart.h"
 #include "interrupts_cw32l011.h"
 #include "wifi_config.h"
+#include "cw32l011_adc.h"
+#include "cw32l011_rtc.h"
+#include "cw32l011_sysctrl.h"
 #include <string.h>
 
 /******************************************************************************
@@ -58,9 +61,13 @@ void GPIO_Configuration(void);
 void UART_Configuration(void);
 void NVIC_Configuration(void);
 void UART_SendString(UART_TypeDef *UARTx, char *String);
-void wifi_send_at_command(const char* command);
 void wifi_test_communication(void);
 void delay_ms(uint32_t ms);
+void adc_pa11_init(void);
+uint16_t adc_pa11_read_raw(void);
+uint16_t ADC_Read(uint32_t Channel);
+void rtc_init_lsi(void);
+void rtc_read(RTC_TimeTypeDef* t, RTC_DateTypeDef* d);
 
 /******************************************************************************
  * Local variable definitions ('static')                                      *
@@ -84,6 +91,12 @@ void delay_ms(uint32_t ms);
  ** This sample toggle GPIOA
  **
  ******************************************************************************/
+extern uint8_t Status_Flag;
+uint8_t Inside_flag;
+volatile uint16_t g_adc_pa11_raw = 0;
+volatile RTC_TimeTypeDef g_rtc_time;
+volatile RTC_DateTypeDef g_rtc_date;
+uint8_t hour,minute,second,month,year,day,week;
 int32_t main(void)
 {
     //配置RCC
@@ -94,10 +107,13 @@ int32_t main(void)
     
     // 初始化串口接收
     uart_rx_init();
+    // 初始化PA11 ADC（CH13）
+    adc_pa11_init();
+    // 初始化RTC（LSI时钟）
+    rtc_init_lsi();
     
     GPIO_WritePin( CW_GPIOB, GPIO_PIN_3|GPIO_PIN_4, GPIO_Pin_SET );
     UART_SendString(CW_UART3, "AT\r\n");
-
     // 等待系统稳定
     delay_ms(500);
     
@@ -113,9 +129,10 @@ int32_t main(void)
         // 配置并连接MQTT
         if(mqtt_configure())
         {
-					
+                    
             if(mqtt_connect())
             {
+                                delay_ms(20000);
 
                 // 发布一条测试消息
                 mqtt_publish(MQTT_TEST_TOPIC, MQTT_TEST_PAYLOAD, 0, 0);
@@ -125,6 +142,39 @@ int32_t main(void)
 
     while(1)
     {
+            // 读取RTC时间日期（BCD）
+            rtc_read((RTC_TimeTypeDef*)&g_rtc_time, (RTC_DateTypeDef*)&g_rtc_date);
+												
+						// 假设 g_rtc_time / g_rtc_date 已由 rtc_read() 更新
+						 hour   = RTC_BCDToBin(g_rtc_time.Hour);
+						 minute = RTC_BCDToBin(g_rtc_time.Minute);
+						 second = RTC_BCDToBin(g_rtc_time.Second);
+
+						 month  = RTC_BCDToBin(g_rtc_date.Month);
+						 day    = RTC_BCDToBin(g_rtc_date.Day);
+						 year  = 2000 + RTC_BCDToBin(g_rtc_date.Year);  // 年份转成 20xx
+						 week   = g_rtc_date.Week; // 周是数值 0~6（不需BCD转换）
+            switch(Status_Flag)
+            {
+                case 0:
+                    break;
+                case 1:
+                            g_adc_pa11_raw = ADC_Read(ADC_InputCH13);
+                            if(g_adc_pa11_raw<500)
+                            {
+                                                    // 获取时间戳
+                                                    // 进入事件
+                                Inside_flag=1;
+                            }
+                            else{
+                                Status_Flag=0;
+                            }
+                    break;
+            
+            
+            }
+            // 读取PA11平均ADC值（15次平均），通道13
+            delay_ms(100);
 
     }
 }
@@ -156,16 +206,18 @@ void my_gpio_init()
 
     __SYSCTRL_GPIOA_CLK_ENABLE();    //Open GPIOA Clk
 		__SYSCTRL_GPIOB_CLK_ENABLE();
+		__SYSCTRL_GPIOC_CLK_ENABLE();	
     //set PA00 / PA01 / PA02 / PA03 as output
     GPIO_InitStruct.Pins = GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-
     GPIO_Init( CW_GPIOB, &GPIO_InitStruct);
-    GPIO_InitStruct.Pins =  GPIO_PIN_15;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT_PULLUP;
-    GPIO_InitStruct.IT   = GPIO_IT_NONE;
-    GPIO_Init( CW_GPIOA, &GPIO_InitStruct);
-	
+		
+    GPIO_InitStruct.Pins =  GPIO_PIN_7;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.IT   = GPIO_IT_RISING;
+    GPIO_Init( CW_GPIOB, &GPIO_InitStruct);
+		GPIOB_INTFLAG_CLR(GPIO_PIN_15);
+
     GPIO_InitStruct.Pins = GPIO_PIN_1;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_Init(CW_GPIOA, &GPIO_InitStruct);
@@ -174,7 +226,16 @@ void my_gpio_init()
 
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT_PULLUP;
     GPIO_Init(CW_GPIOA, &GPIO_InitStruct);
-
+    // PA11 设置为模拟输入用于ADC
+    GPIO_InitStruct.Pins = GPIO_PIN_11;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.IT   = GPIO_IT_NONE;
+    GPIO_Init(CW_GPIOA, &GPIO_InitStruct);
+		
+    GPIO_InitStruct.Pins = GPIO_PIN_13;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_Init(CW_GPIOC, &GPIO_InitStruct);
+		
     //UART TX RX 复用
     PA00_AFx_UART3RXD();
     PA01_AFx_UART3TXD();
@@ -219,22 +280,14 @@ void UART_Configuration(void)
  */
 void NVIC_Configuration(void)
 {
+		NVIC_SetPriority(GPIOB_IRQn,1);
     //优先级，无优先级分组
     NVIC_SetPriority(UART3_IRQn, 0);
     //UARTx中断使能
     NVIC_EnableIRQ(UART3_IRQn);
+		NVIC_EnableIRQ(GPIOB_IRQn);
 }
 
-/**
- * @brief 发送WiFi AT命令
- * @param command: 要发送的AT命令
- */
-void wifi_send_at_command(const char* command)
-{
-    UART_SendString(CW_UART3, command);
-    UART_SendString(CW_UART3, "\r\n");
-    delay_ms(1000); // 等待响应
-}
 
 /**
  * @brief 毫秒延时函数
@@ -319,30 +372,93 @@ uint8_t uart_rx_is_data_ready(void)
     return wifi_rx_flag;
 }
 
-/**
- * @brief 获取接收到的数据长度
- * @return 数据长度
- */
-uint16_t uart_rx_get_data_length(void)
+//==================== ADC PA11 (CH13) ====================
+void adc_pa11_init(void)
 {
-    return wifi_rx_index;
+		// 配置 ADC: 单次转换，序列仅 SQR0，通道为 CH13 (PA11)
+		ADC_InitTypeDef adc = {0};
+		adc.ADC_ClkDiv       = ADC_Clk_Div8;
+		adc.ADC_ConvertMode  = ADC_ConvertMode_Once;
+		adc.ADC_BgrEn        = FALSE;
+		adc.ADC_TempSensorEn = FALSE;
+		adc.ADC_SQREns       = ADC_SqrEns0to0; // 只转换SQR0
+		adc.ADC_IN0.ADC_InputChannel = ADC_InputCH13; // PA11
+		adc.ADC_IN0.ADC_SampTime     = ADC_SampTime70Clk;
+		ADC_Init(&adc);
+		ADC_Enable();
 }
 
-/**
- * @brief 处理接收到的数据
- */
-        uint8_t response_buffer[WIFI_BUFFER_SIZE];
-
-void wifi_process_received_data(void)
+uint16_t adc_pa11_read_raw(void)
 {
-    if(uart_rx_is_data_ready())
+		// 软件触发一次
+		ADC_SoftwareStartConvCmd(ENABLE);
+		// 轮询等待单次转换完成
+		while (ADC_GetITStatus(ADC_IT_EOC) == RESET) { }
+		uint16_t val = ADC_GetConversionValue(ADC_RESULT_0);
+		// 清EOC标志（可选）
+		ADC_ClearITPendingBit(ADC_IT_EOC);
+		return val;
+}
+
+// 平均采样：参考你的示例，采样15次求平均
+uint16_t ADC_Read(uint32_t Channel)
+{
+    uint32_t sum = 0;
+		GPIO_WritePin(CW_GPIOC,GPIO_PIN_13,GPIO_Pin_SET);
+
+    // 选择SQR0通道为指定通道；保持当前采样时间
+    CW_ADC->SQRCFR_f.SQRCH0 = Channel;
+    CW_ADC->SAMPLE_f.SQRCH0 = ADC_SampTime70Clk;
+
+    for (uint8_t i = 0; i < 15; i++)
     {
-        uint16_t len = uart_rx_get_data(response_buffer, WIFI_BUFFER_SIZE);
-        
-        // 这里可以添加数据处理逻辑
-        // 例如：解析AT命令响应、处理MQTT消息等
-        
-        // 数据已处理，缓冲区已清空
-        // 可以根据需要添加具体的业务逻辑
+        ADC_SoftwareStartConvCmd(ENABLE);
+        while (ADC_GetITStatus(ADC_IT_EOC) == RESET) { }
+        sum += ADC_GetConversionValue(ADC_RESULT_0);
+        ADC_ClearITPendingBit(ADC_IT_EOC);
     }
+		GPIO_WritePin(CW_GPIOC,GPIO_PIN_13,GPIO_Pin_RESET);
+
+    return (uint16_t)(sum / 15);
 }
+
+//==================== RTC init/read ====================
+void rtc_init_lsi(void)
+{
+    // 1) 先启动 LSI 作为 RTC 的时钟源基准
+    SYSCTRL_LSI_Enable();
+
+    // 2) 使能 RTC 外设时钟（APB2）
+    SYSCTRL_APBPeriphClk_Enable2(SYSCTRL_APB2_PERIPH_RTC, ENABLE);
+
+    // 3) 停止 RTC，配置时钟源为 LSI 后再启动（非POR场景也能生效）
+    RTC_Cmd(DISABLE);
+    RTC_SetClockSource(RTC_RTCCLK_FROM_LSI);
+    RTC_Cmd(ENABLE);
+
+    // 4) 设置初始时间/日期（BCD）
+    RTC_TimeTypeDef t = {0};
+    RTC_DateTypeDef d = {0};
+
+    t.H24    = RTC_HOUR24;
+    t.Hour   = RTC_BinToBCD(12);
+    t.Minute = RTC_BinToBCD(0);
+    t.Second = RTC_BinToBCD(0);
+
+    d.Year   = RTC_BinToBCD(25);
+    d.Month  = RTC_BinToBCD(1);
+    d.Day    = RTC_BinToBCD(1);
+    d.Week   = RTC_Weekday_Wednesday;
+
+    RTC_SetDate(&d);
+    RTC_SetTime(&t);
+}
+
+void rtc_read(RTC_TimeTypeDef* t, RTC_DateTypeDef* d)
+{
+    RTC_GetTime(t);
+    RTC_GetDate(d);
+}
+
+
+

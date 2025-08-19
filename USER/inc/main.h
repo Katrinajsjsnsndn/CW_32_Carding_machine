@@ -64,11 +64,8 @@ void uart_rx_init(void);
 uint16_t uart_rx_get_data(uint8_t *buffer, uint16_t max_len);
 void uart_rx_clear_buffer(void);
 uint8_t uart_rx_is_data_ready(void);
-uint16_t uart_rx_get_data_length(void);
 
-// WiFi通信相关函数
-void wifi_send_at_command(const char *command);
-void wifi_process_received_data(void);
+
 
 // 延时函数
 void delay_ms(uint32_t ms);

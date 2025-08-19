@@ -15,8 +15,8 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
 I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B8344)
 I (C:\Keil_v5\ARM\ARMCC\include\assert.h)(0x588B8344)
-F (.\USER\src\interrupts_cw32l011.c)(0x68A3DEE0)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\interrupts_cw32l011.o --omf_browse .\objects\interrupts_cw32l011.crf --depend .\objects\interrupts_cw32l011.d)
-I (.\USER\inc\main.h)(0x68A3DEE0)
+F (.\USER\src\interrupts_cw32l011.c)(0x68A44DD8)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\interrupts_cw32l011.o --omf_browse .\objects\interrupts_cw32l011.crf --depend .\objects\interrupts_cw32l011.d)
+I (.\USER\inc\main.h)(0x68A441DB)
 I (.\Libraries\inc\cw32l011.h)(0x685A510C)
 I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
@@ -34,8 +34,8 @@ I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
 I (.\Libraries\inc\cw32l011_systick.h)(0x685A510C)
 I (.\USER\inc\interrupts_cw32l011.h)(0x68A3DEE0)
 I (.\Libraries\inc\cw32l011_uart.h)(0x68A290EA)
-F (.\USER\src\main.c)(0x68A3DEE1)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
-I (USER\src\../inc/main.h)(0x68A3DEE0)
+F (.\USER\src\main.c)(0x68A454F3)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+I (USER\src\../inc/main.h)(0x68A441DB)
 I (.\Libraries\inc\cw32l011.h)(0x685A510C)
 I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
@@ -53,10 +53,12 @@ I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
 I (.\Libraries\inc\cw32l011_systick.h)(0x685A510C)
 I (USER\src\../inc/interrupts_cw32l011.h)(0x68A3DEE0)
 I (.\Libraries\inc\cw32l011_uart.h)(0x68A290EA)
-I (.\USER\inc\wifi_config.h)(0x68A3DEE1)
+I (.\USER\inc\wifi_config.h)(0x68A3FD30)
+I (.\Libraries\inc\cw32l011_adc.h)(0x685A510C)
+I (.\Libraries\inc\cw32l011_rtc.h)(0x685A510C)
 F (.\USER\src\wifi_comm.c)(0x68A3DEE0)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\wifi_comm.o --omf_browse .\objects\wifi_comm.crf --depend .\objects\wifi_comm.d)
-I (.\USER\inc\wifi_config.h)(0x68A3DEE1)
-I (.\USER\inc\../inc/main.h)(0x68A3DEE0)
+I (.\USER\inc\wifi_config.h)(0x68A3FD30)
+I (.\USER\inc\../inc/main.h)(0x68A441DB)
 I (.\Libraries\inc\cw32l011.h)(0x685A510C)
 I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
@@ -74,9 +76,9 @@ I (.\Libraries\inc\cw32l011_sysctrl.h)(0x685A510C)
 I (.\Libraries\inc\cw32l011_systick.h)(0x685A510C)
 I (.\USER\inc\../inc/interrupts_cw32l011.h)(0x68A3DEE0)
 I (.\Libraries\inc\cw32l011_uart.h)(0x68A290EA)
-F (.\USER\src\mqtt_client.c)(0x68A3DEE1)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\mqtt_client.o --omf_browse .\objects\mqtt_client.crf --depend .\objects\mqtt_client.d)
-I (.\USER\inc\wifi_config.h)(0x68A3DEE1)
-I (.\USER\inc\../inc/main.h)(0x68A3DEE0)
+F (.\USER\src\mqtt_client.c)(0x68A3EA62)(--c99 --gnu -c --cpu Cortex-M0+ -g -O0 --apcs=interwork --split_sections -I .\Startup -I .\Libraries\inc -I .\USER\inc -I .\StartKit_Board-I.\RTE\_Target_1-ID:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include-ID:\keil_pack\WHXY\CW32L011_DFP\1.0.1\Device\Include-D__UVISION_VERSION="539" -D_RTE_ -D_RTE_-o .\objects\mqtt_client.o --omf_browse .\objects\mqtt_client.crf --depend .\objects\mqtt_client.d)
+I (.\USER\inc\wifi_config.h)(0x68A3FD30)
+I (.\USER\inc\../inc/main.h)(0x68A441DB)
 I (.\Libraries\inc\cw32l011.h)(0x685A510C)
 I (D:\keil_pack\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm0plus.h)(0x626F4ADE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)

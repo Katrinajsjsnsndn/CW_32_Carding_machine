@@ -19,7 +19,7 @@ extern "C" {
 
 /* TCP服务器配置 */
 #define TCP_SERVER_IP       "42f5d77ef1.st1.iotda-device.cn-north-4.myhuaweicloud.com"       // 修改为您的服务器IP
-#define TCP_SERVER_PORT     "8883"                // 修改为您的服务器端口
+#define TCP_SERVER_PORT     "1883"                // 修改为您的服务器端口
 
 /* UART通信配置 */
 #define UART3_BAUDRATE      115200                // UART3波特率
@@ -35,7 +35,7 @@ extern "C" {
 
 /* MQTT测试主题与载荷 */
 #define MQTT_TEST_TOPIC     "test/topic"
-#define MQTT_TEST_PAYLOAD   "hello"
+#define MQTT_TEST_PAYLOAD   "hello_cat"
 
 /* 常用AT命令 */
 #define AT_CMD_TEST         "AT"                  // 测试AT命令
