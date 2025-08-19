@@ -31,6 +31,7 @@
 #include "cw32l011_uart.h"
 #include "interrupts_cw32l011.h"
 #include "wifi_config.h"
+#include <string.h>
 
 /******************************************************************************
  * Local pre-processor symbols/macros ('#define')
@@ -109,25 +110,22 @@ int32_t main(void)
         // 获取IP地址
         wifi_get_ip_address();
         
-        // 连接TCP服务器
-        if(wifi_tcp_connect(TCP_SERVER_IP, TCP_SERVER_PORT))
+        // 配置并连接MQTT
+        if(mqtt_configure())
         {
-            // TCP连接成功，可以发送数据
-            wifi_tcp_send_data("Hello from CW32L011!");
+					
+            if(mqtt_connect())
+            {
+
+                // 发布一条测试消息
+                mqtt_publish(MQTT_TEST_TOPIC, MQTT_TEST_PAYLOAD, 0, 0);
+            }
         }
     }
 
     while(1)
     {
-//        // 处理接收到的数据
-//        wifi_process_received_data();
-//        
-//        // 每10秒发送一次心跳数据
-//        delay_ms(10000);
-//        if(wifi_is_tcp_connected())
-//        {
-//            wifi_tcp_send_data("Heartbeat from CW32L011");
-//        }
+
     }
 }
 

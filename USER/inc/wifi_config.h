@@ -25,6 +25,18 @@ extern "C" {
 #define UART3_BAUDRATE      115200                // UART3波特率
 #define WIFI_BUFFER_SIZE    256                   // WiFi接收缓冲区大小
 
+/* MQTT服务器配置 */
+#define MQTT_BROKER_HOST    "42f5d77ef1.st1.iotda-device.cn-north-4.myhuaweicloud.com"  // MQTT服务器域名/IP
+#define MQTT_BROKER_PORT    "1883"               // MQTT服务器端口（8883=TLS，1883=明文）
+#define MQTT_SSL_ENABLE     1                     // 1: 启用TLS, 0: 关闭TLS（按需修改）
+#define MQTT_CLIENT_ID      "689ed67e32771f177b567fea_2004_0_0_2025081809"     // 客户端ID
+#define MQTT_USERNAME       "689ed67e32771f177b567fea_2004"      // 用户名
+#define MQTT_PASSWORD       "afb5b2c503fa01268db1cb87ffe4104c57435aeafebd9d557ccf2682edbdfaec"      // 密码
+
+/* MQTT测试主题与载荷 */
+#define MQTT_TEST_TOPIC     "test/topic"
+#define MQTT_TEST_PAYLOAD   "hello"
+
 /* 常用AT命令 */
 #define AT_CMD_TEST         "AT"                  // 测试AT命令
 #define AT_CMD_ECHO_OFF     "ATE0"               // 关闭回显
@@ -40,6 +52,16 @@ extern "C" {
 #define AT_CMD_CLOSE_CONN   "AT+IPCLOSE"        // 关闭连接
 #define AT_CMD_SEND_DATA    "AT+IPSEND"         // 发送数据
 #define AT_CMD_GET_STATUS   "AT+IPSTATUS"       // 获取连接状态
+
+/* MQTT相关AT命令（依赖模组支持）*/
+#define AT_CMD_MQTT_CFG_HOST   "AT+MQTT=1"      // 设置MQTT服务器地址
+#define AT_CMD_MQTT_CFG_PORT   "AT+MQTT=2"      // 设置MQTT端口
+#define AT_CMD_MQTT_CFG_SSL    "AT+MQTT=3"      // 设置是否TLS
+#define AT_CMD_MQTT_CFG_CID    "AT+MQTT=4"      // 设置ClientID
+#define AT_CMD_MQTT_CFG_USER   "AT+MQTT=5"      // 设置用户名
+#define AT_CMD_MQTT_CFG_PASS   "AT+MQTT=6"      // 设置密码
+#define AT_CMD_MQTT_CONNECT    "AT+MQTT"        // 发起连接
+#define AT_CMD_MQTT_PUBLISH    "AT+MQTTPUB"     // 发布消息
 
 /* 响应字符串 */
 #define RESP_OK             "OK"                 // 成功响应
@@ -74,6 +96,12 @@ void wifi_tcp_close(void);
 wifi_status_t wifi_get_status(void);
 uint8_t wifi_is_tcp_connected(void);
 uint8_t wifi_send_at_command_wait_response(const char* command, const char* expected_response, uint32_t timeout_ms);
+
+/* MQTT函数声明（基于模组MQTT AT指令）*/
+uint8_t mqtt_configure(void);
+uint8_t mqtt_connect(void);
+uint8_t mqtt_publish(const char* topic, const char* payload, uint8_t qos, uint8_t retain);
+void mqtt_disconnect(void);
 
 #ifdef __cplusplus
 }

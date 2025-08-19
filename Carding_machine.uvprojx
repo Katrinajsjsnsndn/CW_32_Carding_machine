@@ -413,6 +413,11 @@
               <FileType>1</FileType>
               <FilePath>.\USER\src\wifi_comm.c</FilePath>
             </File>
+            <File>
+              <FileName>mqtt_client.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USER\src\mqtt_client.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
