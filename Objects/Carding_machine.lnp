@@ -5,6 +5,7 @@
 ".\objects\main.o"
 ".\objects\wifi_comm.o"
 ".\objects\mqtt_client.o"
+".\objects\my_init.o"
 ".\objects\cw32l011_flash.o"
 ".\objects\cw32l011_gpio.o"
 ".\objects\cw32l011_sysctrl.o"

@@ -35,12 +35,13 @@
 #include "cw32l011_rtc.h"
 #include "cw32l011_sysctrl.h"
 #include "cw32l011_btim.h"
+#include "my_init.h"
 #include <string.h>
 
 /******************************************************************************
  * Local pre-processor symbols/macros ('#define')
  ******************************************************************************/
-#define SENSOR_THRESHOLD 100  // 传感器阈值
+#define SENSOR_THRESHOLD 26
 
 /******************************************************************************
  * Global variable definitions (declared in header file with 'extern')
@@ -49,22 +50,35 @@
 volatile uint8_t wifi_rx_buffer[WIFI_BUFFER_SIZE];  // 接收缓冲区
 volatile uint16_t wifi_rx_index = 0;               // 接收索引
 volatile uint8_t wifi_rx_flag = 0;                 // 接收标志
-volatile uint8_t timer_1s_flag = 0;                // 1秒定时器标志
-volatile uint8_t config_mode_flag = 0;             // 配网模式标志
-volatile uint16_t button_press_time = 0;           // 按键按下时间计数
-volatile uint8_t button_pressed = 0;               // 按键按下标志
-volatile uint8_t config_led_blink = 0;             // 配网LED闪烁标志
-volatile uint16_t config_timeout_counter = 0;      // 配网超时计数器
-uint8_t PIR_pinif = 0;//PIR引脚中断标志位
-uint8_t PIR_timcl = 5;//PIR引脚清除标志位
+
+// 传感/状态与时间变量
+uint8_t PIR_pinif = 0;    // PIR引脚中断标志位
+uint8_t PIR_timcl = 5;    // PIR引脚清除计数
 extern uint8_t Status_Flag;
 uint8_t Inside_flag;
 volatile uint16_t g_adc_pa11_raw = 0;
 volatile RTC_TimeTypeDef g_rtc_time;
 volatile RTC_DateTypeDef g_rtc_date;
 uint8_t hour,minute,second,month,year,day,week;
-uint16_t insideDvar = 0;//扫描计数 防止传感器数据漂移
-uint16_t calibration_value = 0;      // 校准基准值
+uint16_t insideDvar = 0;            // 扫描计数 防止传感器数据漂移
+uint16_t calibration_value = 0;     // 传感器校准基准值
+volatile uint8_t timer_1s_flag = 0; // 1秒定时器标志
+
+// 猫事件记录（进入/离开时间）
+#define CAT_EVENT_MAX 32
+typedef struct {
+	RTC_TimeTypeDef entry_time;
+	RTC_DateTypeDef entry_date;
+	RTC_TimeTypeDef exit_time;
+	RTC_DateTypeDef exit_date;
+	uint8_t in_use;
+	uint8_t has_exit;
+} CatEventRecord;
+
+volatile uint16_t g_cat_event_count = 0;
+volatile uint16_t g_cat_event_write_index = 0;
+volatile int16_t g_cat_event_open_index = -1; // -1 表示当前无未闭合事件
+CatEventRecord g_cat_events[CAT_EVENT_MAX];
 
 /******************************************************************************
  * Local type definitions ('typedef')
@@ -73,20 +87,14 @@ uint16_t calibration_value = 0;      // 校准基准值
 /******************************************************************************
  * Local function prototypes ('static')
  ******************************************************************************/
-void my_gpio_init(void);
-void RCC_Configuration(void);
-void GPIO_Configuration(void);
-void UART_Configuration(void);
-void NVIC_Configuration(void);
 void UART_SendString(UART_TypeDef *UARTx, char *String);
 void wifi_test_communication(void);
-void delay_ms(uint32_t ms);
-void adc_pa11_init(void);
 uint16_t adc_pa11_read_raw(void);
 uint16_t ADC_Read(uint32_t Channel);
-void rtc_init_lsi(void);
 void rtc_read(RTC_TimeTypeDef* t, RTC_DateTypeDef* d);
-void btim_1s_init(void);
+static void cat_record_entry(void);
+static void cat_record_exit(void);
+uint16_t current = 0;
 
 /******************************************************************************
  * Local variable definitions ('static')                                      *
@@ -117,15 +125,15 @@ int32_t main(void)
     my_gpio_init();
     UART_Configuration();
     NVIC_Configuration();
-    
+    btim_1s_init();
     // 初始化串口接收
     uart_rx_init();
     // 初始化PA11 ADC（CH13）
     adc_pa11_init();
     // 初始化RTC（LSI时钟）
     rtc_init_lsi();
-    // 初始化1秒定时器
-    btim_1s_init();
+    // 初始一次ADC基准校准
+    calibration_value = ADC_Read(ADC_InputCH13);
     
     GPIO_WritePin( CW_GPIOB, GPIO_PIN_3|GPIO_PIN_4, GPIO_Pin_SET );
     UART_SendString(CW_UART3, "AT\r\n");
@@ -144,64 +152,46 @@ int32_t main(void)
         // 配置并连接MQTT
         if(mqtt_configure())
         {
+                    
             if(mqtt_connect())
             {
-                delay_ms(20000);
+                                delay_ms(20000);
+
                 // 发布一条测试消息
                 mqtt_publish(MQTT_TEST_TOPIC, MQTT_TEST_PAYLOAD, 0, 0);
             }
         }
     }
-    
-    // 获取校准基准值
-    calibration_value = ADC_Read(ADC_InputCH13);
-    
+
     while(1)
     {
-        // 检查1秒定时器标志
-        if(timer_1s_flag)
-        {
-            timer_1s_flag = 0;  // 清除标志
-            
-            // 读取RTC时间日期（BCD）
-            rtc_read((RTC_TimeTypeDef*)&g_rtc_time, (RTC_DateTypeDef*)&g_rtc_date);
-                                        
-            // 转换为十进制
-            hour   = RTC_BCDToBin(g_rtc_time.Hour);
-            minute = RTC_BCDToBin(g_rtc_time.Minute);
-            second = RTC_BCDToBin(g_rtc_time.Second);
 
-            month  = RTC_BCDToBin(g_rtc_date.Month);
-            day    = RTC_BCDToBin(g_rtc_date.Day);
-            year   = 2000 + RTC_BCDToBin(g_rtc_date.Year);  // 年份转成 20xx
-            week   = g_rtc_date.Week; // 周是数值 0~6（不需BCD转换）
-        }
-        
-        switch(Status_Flag)
-        {
-            case 0:
-                break;
-            case 1:
+            switch(Status_Flag)
+            {
+                case 0:
+                    break;
+                case 1:
                 Status_Flag = 2;//PIR中断触发完成
-                uint16_t current = ADC_Read(ADC_InputCH13);
+                current = ADC_Read(ADC_InputCH13);
                 if(current < (calibration_value - SENSOR_THRESHOLD) || current > (calibration_value + SENSOR_THRESHOLD))
-                {
-                    // 获取时间戳
-                    // 进入事件
-                    Inside_flag=1;
-                    BTIM_Cmd(CW_BTIM1, ENABLE);
-                }
-                else{
-                    Status_Flag=0;
-                }
-                break;
+                            {
+                                                    // 获取时间戳，记录进入事件
+																cat_record_entry();
+                                Inside_flag=1;
+															  BTIM_SetCounter(CW_BTIM1, 0);     // 设置计数器值为0（清零）
+																BTIM_Cmd(CW_BTIM1, ENABLE);
+                            }
+                            else{
+                                Status_Flag=0;
+                            }
+                    break;
             case 3:
                 BTIM_Cmd(CW_BTIM1, DISABLE);  // 停止定时器
                 BTIM_SetCounter(CW_BTIM1, 0);     // 设置计数器值为0（清零）
                 Status_Flag=4;
                 // 红外检测 1秒一次
                 current = ADC_Read(ADC_InputCH13);
-                if((current < (calibration_value - SENSOR_THRESHOLD / 2) || current > (calibration_value + SENSOR_THRESHOLD / 2) || PIR_pinif==1) && insideDvar < 45)
+                if((current < (calibration_value - SENSOR_THRESHOLD / 2) || current > (calibration_value + SENSOR_THRESHOLD / 2) || PIR_pinif==1) && insideDvar <= 45)
                 {
                     if(GPIO_ReadPin(CW_GPIOB,GPIO_PIN_7))
                     {
@@ -220,16 +210,54 @@ int32_t main(void)
                 {
                     insideDvar  =0;
                     Inside_flag =0;
+                    // 记录离开事件
+                    cat_record_exit();
                     BTIM_Cmd(CW_BTIM1, DISABLE);  // 停止定时器
                     BTIM_SetCounter(CW_BTIM1, 0);     // 设置计数器值为0（清零）
                     Status_Flag=0;
                 }
                 break;
         }
-        delay_ms(100);
-    }
+            delay_ms(100);
+
+			
+		}
 }
 
+
+/**************** 猫事件记录实现 ****************/
+static void cat_record_entry(void)
+{
+	if (g_cat_event_open_index != -1) {
+		return; // 已有未闭合事件，避免重复
+	}
+	CatEventRecord *e = &g_cat_events[g_cat_event_write_index];
+	rtc_read((RTC_TimeTypeDef*)&g_rtc_time, (RTC_DateTypeDef*)&g_rtc_date);
+	e->entry_time = g_rtc_time;
+	e->entry_date = g_rtc_date;
+	e->has_exit = 0;
+	e->in_use = 1;
+	g_cat_event_open_index = (int16_t)g_cat_event_write_index;
+}
+
+static void cat_record_exit(void)
+{
+	if (g_cat_event_open_index == -1) {
+		return; // 没有进行中的事件
+	}
+	CatEventRecord *e = &g_cat_events[g_cat_event_open_index];
+	rtc_read((RTC_TimeTypeDef*)&g_rtc_time, (RTC_DateTypeDef*)&g_rtc_date);
+	e->exit_time = g_rtc_time;
+	e->exit_date = g_rtc_date;
+	e->has_exit = 1;
+
+	// 推进写指针与计数
+	g_cat_event_write_index = (uint16_t)((g_cat_event_write_index + 1) % CAT_EVENT_MAX);
+	if (g_cat_event_count < CAT_EVENT_MAX) {
+		g_cat_event_count++;
+	}
+	g_cat_event_open_index = -1;
+}
 
 /******************************************************************************
  * EOF (not truncated)
@@ -250,292 +278,6 @@ void assert_failed(uint8_t* file, uint32_t line)
        /* USER CODE END 6 */
 }
 #endif
-
-void my_gpio_init()
-{
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-    __SYSCTRL_GPIOA_CLK_ENABLE();    //Open GPIOA Clk
-    __SYSCTRL_GPIOB_CLK_ENABLE();
-    __SYSCTRL_GPIOC_CLK_ENABLE();    
-    //set PA00 / PA01 / PA02 / PA03 as output
-    GPIO_InitStruct.Pins = GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_Init( CW_GPIOB, &GPIO_InitStruct);
-    
-    GPIO_InitStruct.Pins =  GPIO_PIN_7; // PIR sensor input
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.IT   = GPIO_IT_RISING; // Rising edge interrupt
-    GPIO_Init( CW_GPIOB, &GPIO_InitStruct);
-    GPIOB_INTFLAG_CLR(GPIO_PIN_7); // Clears the interrupt flag for PIN_7
-
-    GPIO_InitStruct.Pins = GPIO_PIN_1;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_Init(CW_GPIOA, &GPIO_InitStruct);
-    
-    GPIO_InitStruct.Pins = GPIO_PIN_0;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT_PULLUP;
-    GPIO_Init(CW_GPIOA, &GPIO_InitStruct);
-    
-    // PA11 设置为模拟输入用于ADC
-    GPIO_InitStruct.Pins = GPIO_PIN_11;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.IT   = GPIO_IT_NONE;
-    GPIO_Init(CW_GPIOA, &GPIO_InitStruct);
-    
-    GPIO_InitStruct.Pins = GPIO_PIN_13; // PC13 for LED control
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_Init(CW_GPIOC, &GPIO_InitStruct);
-    
-    //UART TX RX 复用
-    PA00_AFx_UART3RXD();
-    PA01_AFx_UART3TXD();
-}
-
-/**
- * @brief 配置RCC
- *
- */
-void RCC_Configuration(void)
-{
-    //SYSCLK = HSI = 8MHz = HCLK = PCLK
-    SYSCTRL_HSI_Enable(SYSCTRL_HSIOSC_DIV12);
-
-    //外设时钟使能
-    SYSCTRL_AHBPeriphClk_Enable(SYSCTRL_AHB_PERIPH_GPIOA, ENABLE);
-    SYSCTRL_APBPeriphClk_Enable1(SYSCTRL_APB1_PERIPH_UART3, ENABLE); // 修正为UART3
-    SYSCTRL_APBPeriphClk_Enable2(SYSCTRL_APB2_PERIPH_BTIM123, ENABLE);  // 使能BTIM时钟
-}     
-
-/**
- * @brief 配置UART
- *
- */
-void UART_Configuration(void)
-{
-    UART_InitTypeDef UART_InitStructure = {0};
-
-    UART_InitStructure.UART_BaudRate = 115200;
-    UART_InitStructure.UART_Over = UART_Over_16;
-    UART_InitStructure.UART_Source = UART_Source_PCLK;
-    UART_InitStructure.UART_UclkFreq = 8000000;
-    UART_InitStructure.UART_StartBit = UART_StartBit_FE;
-    UART_InitStructure.UART_StopBits = UART_StopBits_1;
-    UART_InitStructure.UART_Parity = UART_Parity_No ;
-    UART_InitStructure.UART_HardwareFlowControl = UART_HardwareFlowControl_None;
-    UART_InitStructure.UART_Mode = UART_Mode_Rx | UART_Mode_Tx;
-    UART_Init(CW_UART3, &UART_InitStructure);
-}
-/**
- * @brief 配置NVIC
- *
- */
-void NVIC_Configuration(void)
-{
-    NVIC_SetPriority(GPIOB_IRQn,1);
-    //优先级，无优先级分组
-    NVIC_SetPriority(UART3_IRQn, 0);
-    NVIC_SetPriority(BTIM1_IRQn, 2);  // BTIM1中断优先级
-    //UARTx中断使能
-    NVIC_EnableIRQ(UART3_IRQn);
-    NVIC_EnableIRQ(GPIOB_IRQn);
-    NVIC_EnableIRQ(BTIM1_IRQn);       // 使能BTIM1中断
-}
-
-
-/**
- * @brief 毫秒延时函数
- * @param ms: 延时时间(毫秒)
- */
-void delay_ms(uint32_t ms)
-{
-    uint32_t i, j;
-    for(i = 0; i < ms; i++)
-    {
-        for(j = 0; j < 1000; j++)
-        {
-            __NOP();
-        }
-    }
-}
-
-/**
- * @brief 初始化串口接收
- */
-void uart_rx_init(void)
-{
-    // 清空接收缓冲区
-    uart_rx_clear_buffer();
-    
-    // 启用UART3接收中断
-    UART_ITConfig(CW_UART3, UART_IT_RC, ENABLE);  // 启用接收中断
-    
-    // 启用UART3中断
-    NVIC_EnableIRQ(UART3_IRQn);
-}
-
-/**
- * @brief 获取接收到的数据
- * @param buffer: 数据缓冲区
- * @param max_len: 最大长度
- * @return 实际接收到的数据长度
- */
-uint16_t uart_rx_get_data(uint8_t *buffer, uint16_t max_len)
-{
-    uint16_t len = 0;
-
-    if(wifi_rx_flag && wifi_rx_index > 0)
-    {
-        // 计算实际长度
-        len = (wifi_rx_index < max_len) ? wifi_rx_index : max_len;
-
-        // 复制数据
-        for(uint16_t i = 0; i < len; i++)
-        {
-            buffer[i] = wifi_rx_buffer[i];
-        }
-
-        // 清空接收标志
-        wifi_rx_flag = 0;
-    }
-    //uart_rx_clear_buffer();
-    return len;
-}
-
-/**
- * @brief 清空接收缓冲区
- */
-void uart_rx_clear_buffer(void)
-{
-    wifi_rx_index = 0;
-    wifi_rx_flag = 0;
-    
-    // 清空缓冲区内容
-    for(uint16_t i = 0; i < WIFI_BUFFER_SIZE; i++)
-    {
-        wifi_rx_buffer[i] = 0;
-    }
-}
-
-/**
- * @brief 检查是否有数据可读
- * @return 1: 有数据, 0: 无数据
- */
-uint8_t uart_rx_is_data_ready(void)
-{
-    return wifi_rx_flag;
-}
-
-//==================== ADC PA11 (CH13) ====================
-void adc_pa11_init(void)
-{
-    // 配置 ADC: 单次转换，序列仅 SQR0，通道为 CH13 (PA11)
-    ADC_InitTypeDef adc = {0};
-    adc.ADC_ClkDiv       = ADC_Clk_Div8;
-    adc.ADC_ConvertMode  = ADC_ConvertMode_Once;
-    adc.ADC_BgrEn        = FALSE;
-    adc.ADC_TempSensorEn = FALSE;
-    adc.ADC_SQREns       = ADC_SqrEns0to0; // 只转换SQR0
-    adc.ADC_IN0.ADC_InputChannel = ADC_InputCH13; // PA11
-    adc.ADC_IN0.ADC_SampTime     = ADC_SampTime70Clk;
-    ADC_Init(&adc);
-    ADC_Enable();
-}
-
-uint16_t adc_pa11_read_raw(void)
-{
-    // 软件触发一次
-    ADC_SoftwareStartConvCmd(ENABLE);
-    // 轮询等待单次转换完成
-    while (ADC_GetITStatus(ADC_IT_EOC) == RESET) { }
-    uint16_t val = ADC_GetConversionValue(ADC_RESULT_0);
-    // 清EOC标志（可选）
-    ADC_ClearITPendingBit(ADC_IT_EOC);
-    return val;
-}
-
-// 平均采样：参考你的示例，采样15次求平均
-uint16_t ADC_Read(uint32_t Channel)
-{
-    uint32_t sum = 0;
-    GPIO_WritePin(CW_GPIOC,GPIO_PIN_13,GPIO_Pin_SET); // Debug LED ON
-
-    // 选择SQR0通道为指定通道；保持当前采样时间
-    CW_ADC->SQRCFR_f.SQRCH0 = Channel;
-    CW_ADC->SAMPLE_f.SQRCH0 = ADC_SampTime70Clk;
-
-    for (uint8_t i = 0; i < 15; i++)
-    {
-        ADC_SoftwareStartConvCmd(ENABLE);
-        while (ADC_GetITStatus(ADC_IT_EOC) == RESET) { }
-        sum += ADC_GetConversionValue(ADC_RESULT_0);
-        ADC_ClearITPendingBit(ADC_IT_EOC);
-    }
-    GPIO_WritePin(CW_GPIOC,GPIO_PIN_13,GPIO_Pin_RESET); // Debug LED OFF
-
-    return (uint16_t)(sum / 15);
-}
-
-//==================== RTC init/read ====================
-void rtc_init_lsi(void)
-{
-    // 1) 先启动 LSI 作为 RTC 的时钟源基准
-    SYSCTRL_LSI_Enable();
-
-    // 2) 使能 RTC 外设时钟（APB2）
-    SYSCTRL_APBPeriphClk_Enable2(SYSCTRL_APB2_PERIPH_RTC, ENABLE);
-
-    // 3) 停止 RTC，配置时钟源为 LSI 后再启动（非POR场景也能生效）
-    RTC_Cmd(DISABLE);
-    RTC_SetClockSource(RTC_RTCCLK_FROM_LSI);
-    RTC_Cmd(ENABLE);
-
-    // 4) 设置初始时间/日期（BCD）
-    RTC_TimeTypeDef t = {0};
-    RTC_DateTypeDef d = {0};
-
-    t.H24    = RTC_HOUR24;
-    t.Hour   = RTC_BinToBCD(12);
-    t.Minute = RTC_BinToBCD(0);
-    t.Second = RTC_BinToBCD(0);
-
-    d.Year   = RTC_BinToBCD(25);
-    d.Month  = RTC_BinToBCD(1);
-    d.Day    = RTC_BinToBCD(1);
-    d.Week   = RTC_Weekday_Wednesday;
-
-    RTC_SetDate(&d);
-    RTC_SetTime(&t);
-}
-
-void rtc_read(RTC_TimeTypeDef* t, RTC_DateTypeDef* d)
-{
-    RTC_GetTime(t);
-    RTC_GetDate(d);
-}
-
-//==================== BTIM 1秒定时器 ====================
-void btim_1s_init(void)
-{
-    // 1. 使能BTIM外设时钟 (already done in RCC_Configuration)
-    // SYSCTRL_APBPeriphClk_Enable2(SYSCTRL_APB2_PERIPH_BTIM123, ENABLE);
-    
-    // 2. 配置BTIM参数
-    BTIM_TimeBaseInitTypeDef btim = {0};
-    btim.BTIM_Mode = BTIM_MODE_TIMER;           // 定时器模式
-    btim.BTIM_Period = 1000;                    // 8MHz/8000 = 1KHz, 1KHz/1000 = 1Hz
-    btim.BTIM_Prescaler = 8000;                 // 预分频值8000
-    btim.BTIM_CountMode = BTIM_COUNT_MODE_REPETITIVE; // 连续模式
-    
-    // 3. 初始化BTIM
-    BTIM_TimeBaseInit(CW_BTIM1, &btim);
-    
-    // 4. 使能BTIM中断
-    BTIM_ITConfig(CW_BTIM1, BTIM_IT_UPDATE, ENABLE);
-    
-    // 5. 启动BTIM
-    BTIM_Cmd(CW_BTIM1, ENABLE);
-}
 
 
 
