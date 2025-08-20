@@ -21,3 +21,4 @@
 .\objects\main.o: .\USER\inc\wifi_config.h
 .\objects\main.o: .\Libraries\inc\cw32l011_adc.h
 .\objects\main.o: .\Libraries\inc\cw32l011_rtc.h
+.\objects\main.o: .\Libraries\inc\cw32l011_btim.h

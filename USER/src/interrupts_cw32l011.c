@@ -19,6 +19,7 @@
 #include "interrupts_cw32l011.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "cw32l011_btim.h"
 /* USER CODE END Includes */
 
 
@@ -175,6 +176,8 @@ void GPIOA_IRQHandler(void)
     /* USER CODE END */
 }
 uint8_t Status_Flag;
+extern uint8_t PIR_pinif,PIR_timcl;
+
 /**
  * @brief This funcation handles GPIOB
  */
@@ -183,7 +186,13 @@ void GPIOB_IRQHandler(void)
     /* USER CODE BEGIN */
 	    GPIOB_INTFLAG_CLR(GPIO_PIN_7);
 
-    Status_Flag=1;
+    if(Status_Flag==0)
+		{
+			Status_Flag=1;
+			PIR_pinif = 1;
+			PIR_timcl = 5;
+		}
+		
     /* USER CODE END */
 }
 
@@ -268,13 +277,25 @@ void LPTIM_IRQHandler(void)
 }
 
 /**
- * @brief This funcation handles BTIM1
+ * @brief BTIM1 1秒定时器中断处理函数
  */
 void BTIM1_IRQHandler(void)
 {
-    /* USER CODE BEGIN */
-
-    /* USER CODE END */
+    if(BTIM_GetITStatus(CW_BTIM1, BTIM_IT_UPDATE) != RESET)
+    {
+        // 清除中断标志
+        BTIM_ClearITPendingBit(CW_BTIM1, BTIM_IT_UPDATE);
+        if(Status_Flag==2 ||Status_Flag==4)
+				{
+					Status_Flag=3;
+				}
+					if(PIR_pinif == 1){
+					PIR_timcl--;
+					if(PIR_timcl == 0){
+						PIR_pinif = 0;
+						}
+					}
+    }
 }
 
 /**

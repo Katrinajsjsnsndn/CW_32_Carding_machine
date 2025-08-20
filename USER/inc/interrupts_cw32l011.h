@@ -80,6 +80,8 @@ extern void CLKFAULT_IRQHandler(void);
 extern volatile uint8_t wifi_rx_buffer[];
 extern volatile uint16_t wifi_rx_index;
 extern volatile uint8_t wifi_rx_flag;
+// 1秒定时器标志
+extern volatile uint8_t timer_1s_flag;
 /* USER CODE END EFP */
 
 
