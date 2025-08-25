@@ -8,6 +8,8 @@
 #include "wifi_config.h"
 #include "main.h"
 #include <string.h>
+#include <stdio.h>
+#include "cw32l011_rtc.h"
 
 // 全局变量
 static volatile wifi_status_t wifi_current_status = WIFI_STATUS_DISCONNECTED;
@@ -222,4 +224,127 @@ wifi_status_t wifi_get_status(void)
 uint8_t wifi_is_tcp_connected(void)
 {
     return tcp_connected;
+}
+
+/**
+ * @brief 配置并启动SNTP时间同步
+ * @param timezone: 时区偏移（小时），如8表示UTC+8
+ * @return 1: 成功, 0: 失败
+ */
+uint8_t wifi_sntp_config(uint8_t timezone)
+{
+    char command[32];
+    sprintf(command, "%s=1,%d", AT_CMD_SNTP_CONFIG, timezone);
+    return wifi_send_at_command_wait_response(command, RESP_OK, 5000);
+}
+
+/**
+ * @brief 解析SNTP时间响应
+ * @param response: SNTP响应字符串
+ * @param time: 输出时间结构体
+ * @param date: 输出日期结构体
+ * @return 1: 成功解析, 0: 解析失败
+ */
+static uint8_t parse_sntp_time(const char* response, RTC_TimeTypeDef* time, RTC_DateTypeDef* date)
+{
+    // 响应格式: +SNTPTIME:WedMay0310:49:412023
+    if(strncmp(response, "+SNTPTIME:", 10) != 0) {
+        return 0;
+    }
+    
+    const char* time_str = response + 10;
+    char week[4], month[4];
+    uint8_t day, hour, minute, second;
+    uint16_t year;
+    
+    // 解析: WedMay0310:49:412023
+    if(sscanf(time_str, "%3s%3s%2hhu%2hhu:%2hhu:%2hhu%4hu", 
+              week, month, &day, &hour, &minute, &second, &year) != 7) {
+        return 0;
+    }
+    
+    // 转换月份名称到数字
+    uint8_t month_num = 0;
+    if(strcmp(month, "Jan") == 0) month_num = 1;
+    else if(strcmp(month, "Feb") == 0) month_num = 2;
+    else if(strcmp(month, "Mar") == 0) month_num = 3;
+    else if(strcmp(month, "Apr") == 0) month_num = 4;
+    else if(strcmp(month, "May") == 0) month_num = 5;
+    else if(strcmp(month, "Jun") == 0) month_num = 6;
+    else if(strcmp(month, "Jul") == 0) month_num = 7;
+    else if(strcmp(month, "Aug") == 0) month_num = 8;
+    else if(strcmp(month, "Sep") == 0) month_num = 9;
+    else if(strcmp(month, "Oct") == 0) month_num = 10;
+    else if(strcmp(month, "Nov") == 0) month_num = 11;
+    else if(strcmp(month, "Dec") == 0) month_num = 12;
+    else return 0;
+    
+    // 转换星期名称到数字
+    uint8_t week_num = 0;
+    if(strcmp(week, "Mon") == 0) week_num = RTC_Weekday_Monday;
+    else if(strcmp(week, "Tue") == 0) week_num = RTC_Weekday_Tuesday;
+    else if(strcmp(week, "Wed") == 0) week_num = RTC_Weekday_Wednesday;
+    else if(strcmp(week, "Thu") == 0) week_num = RTC_Weekday_Thursday;
+    else if(strcmp(week, "Fri") == 0) week_num = RTC_Weekday_Friday;
+    else if(strcmp(week, "Sat") == 0) week_num = RTC_Weekday_Saturday;
+    else if(strcmp(week, "Sun") == 0) week_num = RTC_Weekday_Sunday;
+    else return 0;
+    
+    // 设置时间结构体
+    time->H24 = RTC_HOUR24;
+    time->Hour = RTC_BinToBCD(hour);
+    time->Minute = RTC_BinToBCD(minute);
+    time->Second = RTC_BinToBCD(second);
+    
+    // 设置日期结构体
+    date->Year = RTC_BinToBCD(year % 100);  // 只取年份后两位
+    date->Month = RTC_BinToBCD(month_num);
+    date->Day = RTC_BinToBCD(day);
+    date->Week = week_num;
+    
+    return 1;
+}
+
+/**
+ * @brief 获取SNTP时间并同步到RTC
+ * @return 1: 成功, 0: 失败
+ */
+uint8_t wifi_sntp_sync_time(void)
+{
+    uint8_t response_buffer[WIFI_BUFFER_SIZE];
+    RTC_TimeTypeDef time;
+    RTC_DateTypeDef date;
+    
+    // 清空接收缓冲区
+    uart_rx_clear_buffer();
+    
+    // 发送SNTP时间查询命令
+    UART_SendString(CW_UART3, (char*)AT_CMD_SNTP_QUERY);
+    UART_SendString(CW_UART3, "\r\n");
+    
+    // 等待响应
+    uint32_t start_time = 0;
+    while(start_time < 10000)  // 10秒超时
+    {
+        if(uart_rx_is_data_ready())
+        {
+            uint16_t len = uart_rx_get_data(response_buffer, WIFI_BUFFER_SIZE);
+            response_buffer[len] = '\0';  // 确保字符串结束
+            
+            // 查找SNTP时间响应
+            char* sntp_response = strstr((char*)response_buffer, "+SNTPTIME:");
+            if(sntp_response && parse_sntp_time(sntp_response, &time, &date))
+            {
+                // 设置RTC时间
+                RTC_SetDate(&date);
+                RTC_SetTime(&time);
+                return 1;
+            }
+        }
+        
+        delay_ms(100);
+        start_time += 100;
+    }
+    
+    return 0;
 }

@@ -94,6 +94,8 @@ uint16_t ADC_Read(uint32_t Channel);
 void rtc_read(RTC_TimeTypeDef* t, RTC_DateTypeDef* d);
 static void cat_record_entry(void);
 static void cat_record_exit(void);
+static void cat_publish_closed_event(const CatEventRecord* e);
+static void sync_rtc_time_from_network(void);
 uint16_t current = 0;
 
 /******************************************************************************
@@ -155,16 +157,20 @@ int32_t main(void)
                     
             if(mqtt_connect())
             {
-                                delay_ms(20000);
+                delay_ms(20000);
 
                 // 发布一条测试消息
                 mqtt_publish(MQTT_TEST_TOPIC, MQTT_TEST_PAYLOAD, 0, 0);
+                
+                // 同步网络时间到RTC
+                sync_rtc_time_from_network();
             }
         }
     }
 
     while(1)
     {
+						rtc_read((RTC_TimeTypeDef*)&g_rtc_time, (RTC_DateTypeDef*)&g_rtc_date);
 
             switch(Status_Flag)
             {
@@ -196,13 +202,11 @@ int32_t main(void)
                     if(GPIO_ReadPin(CW_GPIOB,GPIO_PIN_7))
                     {
                         insideDvar = 0;
-                        BTIM_SetCounter(CW_BTIM1, 0);     // 设置计数器值为0（清零）
-                        BTIM_Cmd(CW_BTIM1, ENABLE);
+
                     }
                     else
                     {
-                        BTIM_SetCounter(CW_BTIM1, 0);     // 设置计数器值为0（清零）
-                        BTIM_Cmd(CW_BTIM1, ENABLE);
+
                         insideDvar++;
                     }
                 }
@@ -216,9 +220,12 @@ int32_t main(void)
                     BTIM_SetCounter(CW_BTIM1, 0);     // 设置计数器值为0（清零）
                     Status_Flag=0;
                 }
+								        BTIM_SetCounter(CW_BTIM1, 0);     // 设置计数器值为0（清零）
+                        BTIM_Cmd(CW_BTIM1, ENABLE);
                 break;
         }
-            delay_ms(100);
+				mqtt_publish(MQTT_TEST_TOPIC, MQTT_TEST_PAYLOAD, 0, 0);
+        delay_ms(100);
 
 			
 		}
@@ -257,6 +264,66 @@ static void cat_record_exit(void)
 		g_cat_event_count++;
 	}
 	g_cat_event_open_index = -1;
+
+	// 发布到云端
+	cat_publish_closed_event(e);
+}
+
+static void cat_publish_closed_event(const CatEventRecord* e)
+{
+	char payload[160];
+	// 格式：{"entry":"YYYY-MM-DD HH:MM:SS","exit":"YYYY-MM-DD HH:MM:SS"}
+	sprintf(payload,
+			"{entry:20%02u-%02u-%02u %02u:%02u:%02u exit:20%02u-%02u-%02u %02u:%02u:%02u}",
+			(unsigned)RTC_BCDToBin(e->entry_date.Year),
+			(unsigned)RTC_BCDToBin(e->entry_date.Month),
+			(unsigned)RTC_BCDToBin(e->entry_date.Day),
+			(unsigned)RTC_BCDToBin(e->entry_time.Hour),
+			(unsigned)RTC_BCDToBin(e->entry_time.Minute),
+			(unsigned)RTC_BCDToBin(e->entry_time.Second),
+			(unsigned)RTC_BCDToBin(e->exit_date.Year),
+			(unsigned)RTC_BCDToBin(e->exit_date.Month),
+			(unsigned)RTC_BCDToBin(e->exit_date.Day),
+			(unsigned)RTC_BCDToBin(e->exit_time.Hour),
+			(unsigned)RTC_BCDToBin(e->exit_time.Minute),
+			(unsigned)RTC_BCDToBin(e->exit_time.Second));
+	// 发布，QoS0, 不保留
+	mqtt_publish(MQTT_CAT_EVENT_TOPIC, payload, 0, 0);
+}
+
+static void sync_rtc_time_from_network(void)
+{
+    // 配置SNTP（时区UTC+8，即北京时间）
+    if(wifi_sntp_config(8))
+    {
+        delay_ms(2000);  // 等待SNTP配置生效
+        
+        // 获取并同步时间
+        if(wifi_sntp_sync_time())
+        {
+            // 时间同步成功
+            // 可以在这里添加成功指示，比如LED闪烁
+        }
+        else
+        {
+            // 时间同步失败，使用默认时间
+            RTC_TimeTypeDef t = {0};
+            RTC_DateTypeDef d = {0};
+            
+            t.H24 = RTC_HOUR24;
+            t.Hour = RTC_BinToBCD(10);   // 10点
+            t.Minute = RTC_BinToBCD(30); // 30分
+            t.Second = RTC_BinToBCD(0);  // 0秒
+            
+            d.Year = RTC_BinToBCD(25);   // 2025年
+            d.Month = RTC_BinToBCD(8);   // 8月
+            d.Day = RTC_BinToBCD(18);    // 18日
+            d.Week = RTC_Weekday_Monday; // 周一
+            
+            RTC_SetDate(&d);
+            RTC_SetTime(&t);
+        }
+    }
 }
 
 /******************************************************************************
@@ -279,5 +346,34 @@ void assert_failed(uint8_t* file, uint32_t line)
 }
 #endif
 
-
+//void proc(char* word)
+//{
+//	uint8_t count=0;
+//	uint8_t len=strlen(word);
+//	char *copy_word;
+//	for(int i=0;i<len;i++)
+//	{
+//		if(word[i]!='*')
+//		{
+//			//word[i]=word[i];
+//		}
+//		else
+//		{
+//			word[i]=word[i+1];
+//			i--;
+//			count++;
+//		}
+//	}
+//	for(int j=0;j<count;j++)
+//	{
+//		copy_word[j]='*';
+//	}
+//	for(int k=0;k<(len-count);k++)
+//	{
+//		if(word[k])
+//	
+//	}
+//	
+//	
+//}
 

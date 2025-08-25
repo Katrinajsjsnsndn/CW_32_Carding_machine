@@ -19,3 +19,4 @@
 .\objects\wifi_comm.o: .\Libraries\inc\cw32l011_systick.h
 .\objects\wifi_comm.o: .\USER\inc\../inc/interrupts_cw32l011.h
 .\objects\wifi_comm.o: .\Libraries\inc\cw32l011_uart.h
+.\objects\wifi_comm.o: .\Libraries\inc\cw32l011_rtc.h

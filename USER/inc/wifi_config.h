@@ -35,7 +35,10 @@ extern "C" {
 
 /* MQTT测试主题与载荷 */
 #define MQTT_TEST_TOPIC     "test/topic"
-#define MQTT_TEST_PAYLOAD   "hello_cat"
+#define MQTT_TEST_PAYLOAD   "Hello_Cat"
+
+/* 业务主题：猫事件上报 */
+#define MQTT_CAT_EVENT_TOPIC "cat/events"
 
 /* 常用AT命令 */
 #define AT_CMD_TEST         "AT"                  // 测试AT命令
@@ -62,6 +65,10 @@ extern "C" {
 #define AT_CMD_MQTT_CFG_PASS   "AT+MQTT=6"      // 设置密码
 #define AT_CMD_MQTT_CONNECT    "AT+MQTT"        // 发起连接
 #define AT_CMD_MQTT_PUBLISH    "AT+MQTTPUB"     // 发布消息
+
+/* SNTP时间同步相关AT命令 */
+#define AT_CMD_SNTP_CONFIG     "AT+SNTPTIMECFG" // 配置SNTP
+#define AT_CMD_SNTP_QUERY      "AT+SNTPTIME?"   // 查询SNTP时间
 
 /* 响应字符串 */
 #define RESP_OK             "OK"                 // 成功响应
@@ -102,6 +109,10 @@ uint8_t mqtt_configure(void);
 uint8_t mqtt_connect(void);
 uint8_t mqtt_publish(const char* topic, const char* payload, uint8_t qos, uint8_t retain);
 void mqtt_disconnect(void);
+
+/* SNTP时间同步函数声明 */
+uint8_t wifi_sntp_config(uint8_t timezone);
+uint8_t wifi_sntp_sync_time(void);
 
 #ifdef __cplusplus
 }
